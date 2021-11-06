@@ -5,4 +5,4 @@ navbar:
     - text: "About Me"
       href: Aboutme.html
     - text: "Beer"
-      href: Beer.html
+      href: Beers.html
