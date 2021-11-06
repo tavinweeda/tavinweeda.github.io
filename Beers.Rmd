@@ -279,60 +279,6 @@ CVSpec %>%
 
 
 
-# This for loop creates 500 iterations of train/test splits (from the training data) to tune k
-iterations = 500
-numks = 30
-masterAcc = matrix(nrow = iterations, ncol = numks)
-masterSens = matrix(nrow = iterations, ncol = numks)
-masterSpec = matrix(nrow = iterations, ncol = numks)
-splitPerc=.75
-
-for(j in 1:iterations)
-{
-  trainIndices = sample(1:dim(train)[1],round(splitPerc * dim(train)[1]))
-  train1 = train[trainIndices,]
-  test1 = train[-trainIndices,]
-  for(i in 1:numks)
-  {
-    classifications = knn(train1[,c(3,4)],test1[,c(3,4)],train1$Class, prob = TRUE, k = i)
-    CM = confusionMatrix(table(classifications,test1$Class))
-    masterAcc[j,i] = CM$overall[1]
-    masterSens[j,i] = CM$byClass[1]
-    masterSpec[j,i] = CM$byClass[2]
-  }
-}
-
-MeanAcc = colMeans(masterAcc)
-MeanSens = colMeans(masterSens)
-MeanSpec = colMeans(masterSpec)
-
-kAcc = data.frame(K = seq(1,numks,1), Accuracy = MeanAcc)
-kAcc %>% 
-  ggplot(aes(K, Accuracy)) +
-  geom_point() +
-  geom_line() +
-  theme_clean() + 
-  ylab("Accuracy")+
-  ggtitle("Effect of K on Accuracy (Train/Test Split)")
-
-kSens = data.frame(K = seq(1,numks,1), Sensitivity = MeanSens)
-kSens %>% 
-  ggplot(aes(K, Sensitivity)) +
-  geom_point() +
-  geom_line() +
-  theme_clean() + 
-  ylab("Sensitivity")+
-  ggtitle("Effect of K on Sensitivity (Train/Test Split)")
-
-kSpec = data.frame(K = seq(1,numks,1), Specificity = MeanSpec)
-kSpec %>% 
-  ggplot(aes(K, MeanSpec)) +
-  geom_point() +
-  geom_line() +
-  theme_clean() + 
-  ylab("Specificity")+
-  ggtitle("Effect of K on Specificity (Train/Test Split)")
-
 #We settled on k=25 as it balanced Accuracy, Sensitivity and Specificity the best.
 classifications = knn(train[,c(3,4)],validate[,c(3,4)],train$Class, prob = TRUE, k = 19)
 CM = confusionMatrix(table(classifications,validate$Class))
