@@ -4,5 +4,3 @@ navbar:
   left:
     - text: "Aboutme"
       href: Aboutme.html
-    - text: "BeerStudy"
-      href: Beers.html
