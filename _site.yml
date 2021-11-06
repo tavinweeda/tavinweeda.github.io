@@ -2,7 +2,7 @@ name: "my-website"
 navbar:
   title: "My Website"
   left:
-    - text: "About"
+    - text: "Home"
       href: index.html
     - text: "Aboutme"
       href: Aboutme.html
